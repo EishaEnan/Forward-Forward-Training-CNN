@@ -1,3 +1,5 @@
+Cloned from: Kevin and Gabril's Discovery Project https://github.com/Reinn90/FF_DP_2024
+
 # Reimplementation of the Forward-Forward Algorithm
 
 This is a reimplementation of Geoffrey Hinton's Forward-Forward Algorithm in Python/Pytorch.
