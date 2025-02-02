@@ -55,6 +55,12 @@ def get_gpu_memory_usage():
 def get_cpu_usage():
     return psutil.cpu_percent(interval=None)
 
+def get_gpu_power_usage():
+    handle = pynvml.nvmlDeviceGetHandleByIndex(0)  # GPU 0
+    power = pynvml.nvmlDeviceGetPowerUsage(handle) / 1000  # Convert from milliwatts to watts
+    return power
+
+
 # Utility Functions
 
 
@@ -177,9 +183,10 @@ def train_hybrid_model(model, dataloader, num_classes, device, epochs=10, lr=1e-
         cpu_memory = get_cpu_memory_usage()
         gpu_memory = get_gpu_memory_usage() if device.type == 'cuda' else 0
         cpu_usage = get_cpu_usage()
+        power_usage = get_gpu_power_usage()
 
         print(f"Epoch {epoch + 1}/{epochs}, Loss: {running_loss / len(dataloader):.4f}, "
-              f"Time: {epoch_time:.2f}s, CPU Mem: {cpu_memory:.2f} MB, GPU Mem: {gpu_memory:.2f} MB, CPU Usage: {cpu_usage:.2f}%")
+              f"Time: {epoch_time:.2f}s, CPU Mem: {cpu_memory:.2f} MB, GPU Mem: {gpu_memory:.2f} MB, CPU Usage: {cpu_usage:.2f}%, GPU Power: {power_usage:.2f} W")
 
 # Testing Loop
 def test_hybrid_model(model, dataloader, device):
