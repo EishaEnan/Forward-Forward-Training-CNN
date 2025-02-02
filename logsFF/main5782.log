@@ -1,0 +1,19 @@
+Job Starting...
+Files already downloaded and verified
+Files already downloaded and verified
+Starting Training...
+Dataset: CIFAR-10 | Algo: FF | Kernel: 5 | Pad: 2 | Opacity 0.3 | MaxPooling: TRUE
+Channels: 3 → 64 → 128 → 256 → 512  Spatial Dimensions: 32 x 32 → 16 x 16 → 8 x 8 → 4 x 4 → 1 x 1
+Epoch 1/10, Loss: 1.3208, Time: 46.87s, CPU Mem: 4604.86 MB, GPU Mem: 2261.75 MB, CPU Usage: 14.30%
+Epoch 2/10, Loss: 1.0202, Time: 42.28s, CPU Mem: 4605.33 MB, GPU Mem: 2261.75 MB, CPU Usage: 16.70%
+Epoch 3/10, Loss: 0.9221, Time: 44.42s, CPU Mem: 4605.59 MB, GPU Mem: 2261.75 MB, CPU Usage: 16.10%
+Epoch 4/10, Loss: 0.8537, Time: 42.61s, CPU Mem: 4606.00 MB, GPU Mem: 2261.75 MB, CPU Usage: 16.80%
+Epoch 5/10, Loss: 0.8014, Time: 48.19s, CPU Mem: 4606.01 MB, GPU Mem: 2261.75 MB, CPU Usage: 17.10%
+Epoch 6/10, Loss: 0.7532, Time: 48.97s, CPU Mem: 4606.18 MB, GPU Mem: 2261.75 MB, CPU Usage: 16.30%
+Epoch 7/10, Loss: 0.7119, Time: 41.92s, CPU Mem: 4606.20 MB, GPU Mem: 2261.75 MB, CPU Usage: 16.80%
+Epoch 8/10, Loss: 0.6758, Time: 41.09s, CPU Mem: 4606.20 MB, GPU Mem: 2261.75 MB, CPU Usage: 17.20%
+Epoch 9/10, Loss: 0.6387, Time: 40.98s, CPU Mem: 4606.45 MB, GPU Mem: 2261.75 MB, CPU Usage: 17.60%
+Epoch 10/10, Loss: 0.6107, Time: 44.54s, CPU Mem: 4606.46 MB, GPU Mem: 2261.75 MB, CPU Usage: 16.30%
+Starting Testing...
+Test Accuracy: 83.67%
+job complete
