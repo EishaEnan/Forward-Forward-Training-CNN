@@ -1,8 +1,8 @@
 #! /usr/bin/env bash
 #
 #SBATCH --job-name=finalBP
-#SBATCH --output=logsBP/main%j.log
-#SBATCH --error=logsBP/error%j.log
+#SBATCH --output=logsBP/main_%A_%a.log
+#SBATCH --error=logsBP/error_%A_%a.log
 #
 #SBATCH --ntasks=4
 #SBATCH --cpus-per-task=2    # Request 2 CPUs per task (total 8 CPUs: 4 tasks x 2 CPUs)
@@ -10,18 +10,19 @@
 #SBATCH --partition=ampere24
 #SBATCH --gres=gpu:a30:1
 
+#SBATCH --array=1-10
+
 ##SBATCH --partition=cpu # the double hash means that SLURM won't read this line.
 
 # load the python module
-# module load PyTorch/Python3.10 # make sure to load the modules needed
-echo "Job Starting..."
+
+echo "Starting job $SLURM_ARRAY_TASK_ID..."
 
 source FF/bin/activate
-# echo "venv activated"
 
-python3.9 finalBP.py
-
+python3.9 finalBP.py --run_id $SLURM_ARRAY_TASK_ID
 
 
-echo "job complete"
+
+echo "Job $SLURM_ARRAY_TASK_ID complete"
 
