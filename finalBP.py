@@ -10,8 +10,8 @@ import pynvml
 import time
 
 # Hyperparameters
-k_size = 5
-p_size = 2
+k_size = 3
+p_size = 1
 
 # GLOBAL VARS
 saved_images_count = 0
@@ -127,7 +127,7 @@ if __name__ == "__main__":
     print("Starting Training...")
     print(f"Dataset: CIFAR-10 | Algo: BP | Kernel: {k_size} | Pad: {p_size } | MaxPooling: TRUE")
     print(f"Channels: 3 → 64 → 128 → 256 → 512 → 1 (via AdaptiveAvgPool) → num_classes")
-    train_backprop_model(model, trainloader, criterion, optimizer, device, epochs=50)
+    train_backprop_model(model, trainloader, criterion, optimizer, device, epochs=200)
 
     print("Starting Testing...")
     test_backprop_model(model, testloader, device)

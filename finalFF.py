@@ -16,8 +16,8 @@ from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 
 # Hyperparameters
 opacity = 0.3
-k_size = 5
-p_size = 2
+k_size = 3
+p_size = 1
 
 # GLOBAL VARS
 saved_images_count = 0
@@ -227,8 +227,8 @@ def prepare_dataloader(batch_size=64):
     ])
     trainset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)
     testset = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=transform)
-    trainloader = DataLoader(trainset, batch_size=batch_size, shuffle=True, num_workers=4)
-    testloader = DataLoader(testset, batch_size=batch_size, shuffle=False, num_workers=4)
+    trainloader = DataLoader(trainset, batch_size=batch_size, shuffle=True, num_workers=8)
+    testloader = DataLoader(testset, batch_size=batch_size, shuffle=False, num_workers=8)
     return trainloader, testloader
 
 # Define Backbone (ResNet18-like structure divided into blocks)
@@ -255,7 +255,7 @@ if __name__ == "__main__":
     print("Starting Training...")
     print(f"Dataset: CIFAR-10 | Algo: FF | Kernel: {k_size} | Pad: {p_size } | Opacity {opacity} | MaxPooling: TRUE")
     print(f"Channels: 3 → 64 → 128 → 256 → 512  Spatial Dimensions: 32 x 32 → 16 x 16 → 8 x 8 → 4 x 4 → 1 x 1")
-    train_hybrid_model(model, trainloader, num_classes=10, device=device, epochs=50, lr=1e-3)
+    train_hybrid_model(model, trainloader, num_classes=10, device=device, epochs=200, lr=1e-3)
 
     print("Starting Testing...")
     test_hybrid_model(model, testloader, device=device)

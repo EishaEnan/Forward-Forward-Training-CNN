@@ -34,7 +34,7 @@ def process_log_files(log_files_pattern):
         
         # Define regex pattern for extracting relevant information
         epoch_pattern = re.compile(
-            r"Epoch (\d+)/\d+, Loss: ([\d\.]+), Time: ([\d\.]+)s, CPU Mem: ([\d\.]+) MB, "
+            r"Epoch (\d+)/(\d+), Loss: ([\d\.]+), Time: ([\d\.]+)s, CPU Mem: ([\d\.]+) MB, "
             r"GPU Mem: ([\d\.]+) MB, CPU Usage: ([\d\.]+)%, GPU Power: ([\d\.]+) W"
         )
         
@@ -43,15 +43,19 @@ def process_log_files(log_files_pattern):
         for line in log_data:
             match = epoch_pattern.search(line)
             if match:
-                epoch, loss, time, cpu_mem, gpu_mem, cpu_usage, gpu_power = match.groups()
-                data.append([int(epoch), float(loss), float(time), float(cpu_mem), float(gpu_mem), float(cpu_usage), float(gpu_power)])
+                epoch, total_epochs, loss, time, cpu_mem, gpu_mem, cpu_usage, gpu_power = match.groups()
+                epoch, total_epochs = int(epoch), int(total_epochs)
+                time, gpu_power = float(time), float(gpu_power)
+                power_work = (gpu_power * time) / 3600  # Convert seconds to hours for Wh
+                data.append([epoch, total_epochs, float(loss), time, float(cpu_mem), float(gpu_mem), float(cpu_usage), gpu_power, power_work])
         
         # Convert to DataFrame
-        df = pd.DataFrame(data, columns=["Epoch", "Loss", "Time (s)", "CPU Memory (MB)", "GPU Memory (MB)", "CPU Usage (%)", "GPU Power (W)"])
+        df = pd.DataFrame(data, columns=["Epoch", "Total Epochs", "Loss", "Time (s)", "CPU Memory (MB)", "GPU Memory (MB)", "CPU Usage (%)", "GPU Power (W)", "Power Work (Wh)"])
         all_data.append(df)
     
     # Combine all runs by averaging values per epoch
     combined_df = pd.concat(all_data).groupby("Epoch").mean()
+    combined_df.index = pd.to_numeric(combined_df.index, errors='coerce').dropna().astype(int)  # Ensure epoch index is integer
     
     # Append row with average of all metrics
     avg_row = combined_df.mean().to_frame().T
@@ -67,15 +71,24 @@ def process_log_files(log_files_pattern):
     
     # Plot and save Loss vs Epoch graph
     plt.figure(figsize=(10, 5))
-    plt.plot(combined_df.index[:-1], combined_df.loc[combined_df.index[:-1], "Loss"], marker='o', linestyle='-', label="Average Loss")
+
+    # Select only numeric indices for plotting and xticks
+    numeric_indices = combined_df.index[combined_df.index != "Average"]
+    plt.plot(numeric_indices, combined_df.loc[numeric_indices, "Loss"], marker=None, linestyle='-', label="Average Loss")
+
     plt.xlabel("Epoch")
     plt.ylabel("Loss")
     plt.title(f"Average Loss vs Epoch (Kernel={kernel}, Padding={padding}, Model={model_type})")
+
+    # Use only numeric indices for xticks and adjust range
+    max_epoch = numeric_indices.max()
+    plt.xticks(range(0, max_epoch + 1, 10))  # Corrected xticks range
+
     plt.legend()
     plt.grid(True)
     plt.savefig(graph_filename)
     plt.show()
-    
+
     print(f"Saved graph: {graph_filename}")
     print(f"Saved average metrics: {csv_filename}")
 
